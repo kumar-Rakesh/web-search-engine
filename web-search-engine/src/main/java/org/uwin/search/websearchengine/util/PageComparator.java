@@ -2,9 +2,16 @@ package org.uwin.search.websearchengine.util;
 
 
 
+
+import java.util.Comparator;
+
+import org.uwin.search.websearchengine.model.Page;
+
+
 import org.uwin.search.websearchengine.model.Page;
 
 import java.util.Comparator;
+
 
 public class PageComparator implements Comparator<Page> {
 

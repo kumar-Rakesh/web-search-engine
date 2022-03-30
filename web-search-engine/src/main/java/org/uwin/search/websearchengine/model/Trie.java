@@ -18,4 +18,5 @@ public interface Trie<V> extends Tree {
 
     Map<Page, Page> getAllPages(String key);
 
+    Map<Word, Word> autoComplete(String key);
 }

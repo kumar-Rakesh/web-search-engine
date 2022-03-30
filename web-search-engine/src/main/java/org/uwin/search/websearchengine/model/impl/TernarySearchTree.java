@@ -2,7 +2,14 @@ package org.uwin.search.websearchengine.model.impl;
 
 import org.uwin.search.websearchengine.model.Page;
 import org.uwin.search.websearchengine.model.Trie;
+
+import org.uwin.search.websearchengine.model.Word;
 import org.uwin.search.websearchengine.util.PageComparator;
+import org.uwin.search.websearchengine.util.WordComparator;
+import org.uwin.search.websearchengine.exception.IllegalArgumentException;
+
+import org.uwin.search.websearchengine.util.PageComparator;
+
 
 import java.util.Map;
 import java.util.Objects;
@@ -139,5 +146,58 @@ public class TernarySearchTree<V> implements Trie<V> {
         pages.remove(Page.builder().page(page).build());
         return true;
     }
+
+    
+    public Map<Word, Word> autoComplete(String key) {
+        if (Objects.isNull(this.root)) {
+            return null;
+        }
+        if (Objects.isNull(key) || key.isEmpty()) {
+            throw new IllegalArgumentException("Key can't be null or empty!");
+        }
+        Node node = getRoot(this.root, key, 0);
+        if (Objects.isNull(node)) {
+            return Map.of();
+        }
+        Map<Word, Word> possibleKeys = new TreeMap(new WordComparator());
+        autoComplete(node.left, key, possibleKeys);
+        autoComplete(node.right, key, possibleKeys);
+        autoComplete(node.mid, key, possibleKeys);
+        return possibleKeys;
+    }
+
+    private Node getRoot(Node root, String key, int index) {
+        if (Objects.isNull(root)) {
+            return null;
+        }
+        char expectedChar = key.charAt(index);
+        if (expectedChar < root.c) {
+            return getRoot(root.left, key, index);
+        } else if (expectedChar > root.c) {
+            return getRoot(root.right, key, index);
+        } else if (index < key.length() - 1) {
+            return getRoot(root.mid, key, index + 1);
+        } else {
+            return root;
+        }
+    }
+
+    private void autoComplete(Node root, String key, Map<Word, Word> keys) {
+        if (Objects.isNull(root)) {
+            return;
+        }
+        if (root.isWord) {
+            Word word = Word.builder().key(key + root.c).val((long) root.val).build();
+            if (keys.size() == limit) {
+                TreeMap<Word, Word> map = (TreeMap<Word, Word>) keys;
+                map.remove(map.firstKey());
+            }
+            keys.put(word, word);
+        }
+        autoComplete(root.left, key + root.c, keys);
+        autoComplete(root.right, key + root.c, keys);
+        autoComplete(root.mid, key + root.c, keys);
+    }
+
 
 }
