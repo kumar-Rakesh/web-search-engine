@@ -1,8 +1,10 @@
 package org.uwin.search.websearchengine.util;
 
-import org.uwin.search.model.Page;
+
 
 import java.util.Comparator;
+
+import org.uwin.search.websearchengine.model.Page;
 
 public class PageComparator implements Comparator<Page> {
 

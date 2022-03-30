@@ -2,7 +2,7 @@ package org.uwin.search.websearchengine.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.uwin.search.exception.base.SearchEngineException;
+import org.uwin.search.websearchengine.exception.base.SearchEngineException;
 
 import java.io.BufferedReader;
 import java.io.File;
