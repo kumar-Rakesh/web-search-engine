@@ -2,10 +2,14 @@ package org.uwin.search.websearchengine.model.impl;
 
 import org.uwin.search.websearchengine.model.Page;
 import org.uwin.search.websearchengine.model.Trie;
+
 import org.uwin.search.websearchengine.model.Word;
 import org.uwin.search.websearchengine.util.PageComparator;
 import org.uwin.search.websearchengine.util.WordComparator;
 import org.uwin.search.websearchengine.exception.IllegalArgumentException;
+
+import org.uwin.search.websearchengine.util.PageComparator;
+
 
 import java.util.Map;
 import java.util.Objects;
@@ -142,6 +146,7 @@ public class TernarySearchTree<V> implements Trie<V> {
         pages.remove(Page.builder().page(page).build());
         return true;
     }
+
     
     public Map<Word, Word> autoComplete(String key) {
         if (Objects.isNull(this.root)) {
@@ -193,5 +198,6 @@ public class TernarySearchTree<V> implements Trie<V> {
         autoComplete(root.right, key + root.c, keys);
         autoComplete(root.mid, key + root.c, keys);
     }
+
 
 }
