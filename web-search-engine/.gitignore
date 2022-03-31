@@ -32,3 +32,10 @@ build/
 ### VS Code ###
 .vscode/
 /bin/
+
+### HTML and Text Files ###
+src/main/resources/static/html
+src/main/resources/static/text
+
+### Logs ###
+.log

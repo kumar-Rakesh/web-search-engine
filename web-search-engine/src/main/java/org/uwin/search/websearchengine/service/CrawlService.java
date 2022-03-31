@@ -9,10 +9,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import org.uwin.search.websearchengine.config.AppConfig;
+import org.uwin.search.websearchengine.exception.base.SearchEngineException;
 import org.uwin.search.websearchengine.model.WebPage;
-
-import static org.uwin.search.websearchengine.model.enums.Constant.HTML_EXT;
-import static org.uwin.search.websearchengine.model.enums.Constant.TXT_EXT;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,9 +19,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.uwin.search.websearchengine.model.enums.Constant.HTML_EXT;
+import static org.uwin.search.websearchengine.model.enums.Constant.TXT_EXT;
 import static org.uwin.search.websearchengine.util.RegexPattern.SPECIAL_CHAR;
 import static org.uwin.search.websearchengine.util.RegexPattern.URL;
 
@@ -33,10 +34,19 @@ import static org.uwin.search.websearchengine.util.RegexPattern.URL;
 @RequiredArgsConstructor
 public class CrawlService {
 
+    private final IndexService indexService;
     private final AppConfig config;
 
     public List<String> crawl(String url) throws IOException {
         List<String> urls = getUrls(url);
+        CompletableFuture.runAsync(() -> {
+            try {
+                WebPage webPage = htmlToText(urls);
+                indexService.index(webPage);
+            } catch (IOException ex) {
+                throw new SearchEngineException();
+            }
+        });
         return urls;
     }
 
