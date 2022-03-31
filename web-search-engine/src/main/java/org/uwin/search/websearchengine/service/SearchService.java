@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.uwin.search.websearchengine.config.AppConfig;
+import org.uwin.search.websearchengine.exception.IllegalArgumentException;
 import org.uwin.search.websearchengine.model.Page;
 import org.uwin.search.websearchengine.model.Trie;
 import org.uwin.search.websearchengine.model.Word;
@@ -42,6 +43,9 @@ public class SearchService {
     }
 
     public List<Word> spellCheck(String key) {
+        if (Objects.isNull(key) || key.isEmpty()) {
+            throw new IllegalArgumentException("Key can't be null or empty");
+        }
         TreeMap<Word, Word> map = new TreeMap<>(new WordComparator());
         for (String token : dictionary) {
             int editDistance = getEditDistance(key, token);
