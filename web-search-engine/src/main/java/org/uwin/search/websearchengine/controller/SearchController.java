@@ -31,4 +31,9 @@ public class SearchController {
         return searchService.autoComplete(query);
     }
 
+    @GetMapping("/search/like")
+    public List<Word> like(@RequestParam("query") String query) {
+        return searchService.spellCheck(query);
+    }
+
 }
