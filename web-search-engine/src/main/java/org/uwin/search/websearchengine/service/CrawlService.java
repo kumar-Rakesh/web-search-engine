@@ -51,6 +51,7 @@ public class CrawlService {
     }
 
     private List<String> getUrls(String url) throws IOException {
+        log.info("Started Crawling!!");
         List<String> urls = new ArrayList<>();
         Document document = Jsoup.connect(url).get();
         Elements links = document.select("a[href]");
@@ -67,6 +68,7 @@ public class CrawlService {
     }
 
     private WebPage htmlToText(List<String> urls) throws IOException {
+        log.info("Started html to text");
         List<File> htmlFiles = new ArrayList<>();
         List<File> textFiles = new ArrayList<>();
         for (String url : urls) {
