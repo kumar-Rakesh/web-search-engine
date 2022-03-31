@@ -29,9 +29,11 @@ public class IndexService {
     private final Set<String> dictionary;
 
     public void index(WebPage webPage) {
+        log.info("Started indexing!!");
         List<File> htmlFiles = webPage.getHtmlFiles();
         List<File> textFiles = webPage.getTextFiles();
         index(htmlFiles, textFiles);
+        log.info("Successfully finished with indexing!!");
     }
 
     private void index(List<File> htmlFiles, List<File> textFiles) {
